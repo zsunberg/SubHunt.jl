@@ -1,3 +1,4 @@
+__precompile__()
 module SubHunt
 
 # package code goes here
@@ -15,6 +16,8 @@ export
     SubHuntPOMDP,
     SubState,
     SubVis,
+
+    DSubHuntPOMDP,
 
     PingFirst
 
@@ -65,6 +68,8 @@ include("enums.jl")
 include("spaces_and_distributions.jl")
 include("transition.jl")
 include("observation.jl")
+
+include("discrete.jl")
 
 include("heuristics.jl")
 include("visualization.jl")
