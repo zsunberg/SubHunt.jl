@@ -32,7 +32,7 @@ end
     size::Int                       = 20
     ownspeed::Int                   = 3
     kill_radius::Float64            = 2.0
-    p_aware_kill::Float64           = 0.4
+    p_aware_kill::Float64           = 0.6
     passive_detect_radius::Float64  = 3.0
     passive_std::Float64            = 5.0
     passive_detected_std::Float64   = 0.5
