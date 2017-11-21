@@ -51,5 +51,7 @@ function rand(rng::AbstractRNG, d::SubHuntInitDist)
     return SubState(own, target, goal, false)
 end
 
+sampletype(::Type{SubHuntInitDist}) = SubState
+
 actions(p::SubHuntPOMDP) = 1:6
 n_actions(p::SubHuntPOMDP) = 6
