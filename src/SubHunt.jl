@@ -71,6 +71,7 @@ include("observation.jl")
 
 include("discrete.jl")
 
+include("edge_cases.jl")
 include("heuristics.jl")
 include("visualization.jl")
 
