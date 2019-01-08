@@ -22,7 +22,7 @@ struct SubObsDist
 end
 
 function Base.rand(rng::AbstractRNG, d::SubObsDist)
-    o = MVector{8, Float64}()
+    o = MVector{8, Float64}(undef)
     for i in 1:length(o)
         if i == d.abeam
             o[i] = rand(rng, d.an)
@@ -46,7 +46,7 @@ function Distributions.pdf(d::SubObsDist, o::Vec8)
 end
 
 function active_beam(rel_pos::Pos)
-    angle = atan2(rel_pos[2], rel_pos[1])
+    angle = atan(rel_pos[2], rel_pos[1])
     while angle <= 0.0
         angle += 2*pi
     end

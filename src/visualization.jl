@@ -27,7 +27,7 @@ function Base.show(io::IO, mime::MIME"text/plain", v::SubVis)
                     if v.a == nothing
                         print(io, 'O')
                     else
-                        print(io, ACT_LETTER[get(v.a)])
+                        print(io, ACT_LETTER[v.a])
                     end
                     printed = true
                 end
@@ -40,7 +40,7 @@ function Base.show(io::IO, mime::MIME"text/plain", v::SubVis)
         print(io, '\n')
     end
     if v.r != nothing
-        @printf("Reward: %8.2f\n", get(v.r))
+        @printf("Reward: %8.2f\n",v.r)
     end
 end
 
