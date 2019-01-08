@@ -61,8 +61,8 @@ end
         end
         if !allend
             @series begin
-                x = linspace(1, size, 200)
-                y = linspace(1, size, 200)
+                x = LinRange(1, size, 200)
+                y = LinRange(1, size, 200)
                 seriestype := :contour
                 fill := :true
                 seriescolor --> :Oranges
