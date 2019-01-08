@@ -1,10 +1,10 @@
 struct SubVis
     p::SubHuntPOMDP
-    a::Nullable{Any}
-    r::Nullable{Any}
-    s::Nullable{Any}
-    o::Nullable{Any}
-    b::Nullable{Any}
+    a::Union{Nothing, Any}
+    r::Union{Nothing, Any}
+    s::Union{Nothing, Any}
+    o::Union{Nothing, Any}
+    b::Union{Nothing, Any}
 end
 
 SubVis(p; s=nothing, a=nothing, o=nothing, b=nothing, r=nothing) = SubVis(p, a, r, s, o, b)
@@ -14,8 +14,8 @@ function Base.show(io::IO, mime::MIME"text/plain", v::SubVis)
     for y in v.p.size:-1:1
         for x in 1:v.p.size
             printed = false
-            if !isnull(v.s)
-                s = get(v.s)
+            if v.s != nothing
+                s = v.s
                 if Pos(x,y) == s.target
                     if s.aware
                         print(io, 'A')
@@ -24,7 +24,7 @@ function Base.show(io::IO, mime::MIME"text/plain", v::SubVis)
                     end
                     printed = true
                 elseif Pos(x,y) == s.own
-                    if isnull(v.a)
+                    if v.a == nothing
                         print(io, 'O')
                     else
                         print(io, ACT_LETTER[get(v.a)])
@@ -39,7 +39,7 @@ function Base.show(io::IO, mime::MIME"text/plain", v::SubVis)
         end
         print(io, '\n')
     end
-    if !isnull(v.r)
+    if v.r != nothing
         @printf("Reward: %8.2f\n", get(v.r))
     end
 end
@@ -48,8 +48,8 @@ end
     size = v.p.size
     xlim --> (1, size)
     ylim --> (1, size)
-    if !isnull(v.b)
-        b = get(v.b)
+    if v.b != nothing
+        b = v.b
         @assert b isa ParticleCollection
         counts = zeros(size, size)
         allend = true
@@ -70,8 +70,8 @@ end
             end
         end
     end
-    if !isnull(v.s)
-        s = get(v.s)
+    if v.s != nothing
+        s = v.s
         @series begin
             label := "Sub"
             marker := :circle

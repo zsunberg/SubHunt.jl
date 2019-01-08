@@ -1,10 +1,10 @@
 using SubHunt
-using Base.Test
-
+using Test
+using Random
 using POMDPs
-using POMDPToolbox
+using POMDPPolicies
+using POMDPSimulators
 using DiscreteValueIteration
-using QMDP
 using ParticleFilters
 
 pomdp = SubHuntPOMDP()
@@ -14,12 +14,12 @@ pomdp = SubHuntPOMDP()
 rng = MersenneTwister(6)
 policy = RandomPolicy(pomdp, rng=rng)
 
-# solver = QMDPSolver()
-# policy = solve(solver, pomdp, verbose=true)
+solver = ValueIterationSolver(verbose=true)
+policy = solve(solver, pomdp)
 # 
-# s = initial_state(pomdp, rng)
-# @show value(policy, s)
-# @show value(policy, SubState(s.own, s.target, s.goal, true))
+s = initialstate(pomdp, rng)
+@show value(policy, s)
+@show value(policy, SubState(s.own, s.target, s.goal, true))
 
 filter = SIRParticleFilter(pomdp, 10000, rng=rng)
 

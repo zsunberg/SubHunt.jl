@@ -10,9 +10,9 @@ struct DSubObsDist
     binsize::Float64
 end
 
-rand(rng::AbstractRNG, d::DSubObsDist) = floor.(Int, (rand(rng, d.cd)./d.binsize)::Vec8)::IVec8
+Base.rand(rng::AbstractRNG, d::DSubObsDist) = floor.(Int, (rand(rng, d.cd)./d.binsize)::Vec8)::IVec8
 
-function pdf(d::DSubObsDist, o::IVec8)
+function Distributions.pdf(d::DSubObsDist, o::IVec8)
     p = 1.0
     cd = d.cd
     for i in 1:length(o)
@@ -27,15 +27,15 @@ function pdf(d::DSubObsDist, o::IVec8)
     return p
 end
 
-observation(p::DSubHuntPOMDP, a::Int, sp::SubState) = DSubObsDist(observation(p.cp, a, sp), p.binsize)
-
-n_states(p::DSubHuntPOMDP) = n_states(p.cp)
-state_index(p::DSubHuntPOMDP, s::SubState) = state_index(p.cp, s)
-states(p::DSubHuntPOMDP) = states(p.cp)
-initial_state_distribution(p::DSubHuntPOMDP) = initial_state_distribution(p.cp)
-actions(p::DSubHuntPOMDP) = actions(p.cp)
-n_actions(p::DSubHuntPOMDP) = n_actions(p.cp)
-transition(p::DSubHuntPOMDP, s::SubState, a::Int) = transition(p.cp, s, a)
-discount(p::DSubHuntPOMDP) = discount(p.cp)
-isterminal(p::DSubHuntPOMDP, s::SubState) = isterminal(p.cp, s)
-reward(p::DSubHuntPOMDP, s::SubState, a::Int, sp::SubState) = reward(p.cp, s, a, sp)
+POMDPs.observation(p::DSubHuntPOMDP, a::Int, sp::SubState) = DSubObsDist(observation(p.cp, a, sp), p.binsize)
+POMDPs.n_states(p::DSubHuntPOMDP) = n_states(p.cp)
+POMDPs.stateindex(p::DSubHuntPOMDP, s::SubState) = stateindex(p.cp, s)
+POMDPs.states(p::DSubHuntPOMDP) = states(p.cp)
+POMDPs.initialstate_distribution(p::DSubHuntPOMDP) = initial_state_distribution(p.cp)
+POMDPs.actions(p::DSubHuntPOMDP) = actions(p.cp)
+POMDPs.actionindex(p::DSubHuntPOMDP, i::Int) = actionindex(p.cp, i)
+POMDPs.n_actions(p::DSubHuntPOMDP) = n_actions(p.cp)
+POMDPs.transition(p::DSubHuntPOMDP, s::SubState, a::Int) = transition(p.cp, s, a)
+POMDPs.discount(p::DSubHuntPOMDP) = discount(p.cp)
+POMDPs.isterminal(p::DSubHuntPOMDP, s::SubState) = isterminal(p.cp, s)
+POMDPs.reward(p::DSubHuntPOMDP, s::SubState, a::Int, sp::SubState) = reward(p.cp, s, a, sp)

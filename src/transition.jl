@@ -1,4 +1,4 @@
-function transition(p::SubHuntPOMDP, s::SubState, a::Int)
+function POMDPs.transition(p::SubHuntPOMDP, s::SubState, a::Int)
     # own always moves ownspeed in desired direction
     if a == PING
         own = s.own
