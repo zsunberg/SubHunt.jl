@@ -1,39 +1,49 @@
 using SubHunt
-using Base.Test
-
+using Test
+using Random
 using POMDPs
-using POMDPToolbox
+using POMDPPolicies
+using POMDPSimulators
 using DiscreteValueIteration
-using QMDP
 using ParticleFilters
+using QMDP
 
-pomdp = SubHuntPOMDP()
+@testset "VI" begin 
+    rng = MersenneTwister(6)
+    pomdp = SubHuntPOMDP()
+    # show(STDOUT, MIME("text/plain"), SubVis(pomdp))
 
-# show(STDOUT, MIME("text/plain"), SubVis(pomdp))
-
-rng = MersenneTwister(6)
-policy = RandomPolicy(pomdp, rng=rng)
-
-# solver = QMDPSolver()
-# policy = solve(solver, pomdp, verbose=true)
-# 
-# s = initial_state(pomdp, rng)
-# @show value(policy, s)
-# @show value(policy, SubState(s.own, s.target, s.goal, true))
-
-filter = SIRParticleFilter(pomdp, 10000, rng=rng)
-
-for (s, a, r, sp) in stepthrough(pomdp, policy, filter, "s,a,r,sp", max_steps=200, rng=rng)
-    v = SubVis(pomdp, s=s, a=a, r=r)
-    show(STDOUT, MIME("text/plain"), v)
+    solver = ValueIterationSolver(verbose=true)
+    vipolicy = solve(solver, pomdp)
+    # 
+    s = initialstate(pomdp, rng)
+    @show value(vipolicy, s)
+    @show value(vipolicy, SubState(s.own, s.target, s.goal, true))
 end
 
-dpomdp = DSubHuntPOMDP(SubHuntPOMDP(), 1.0)
+@testset "QMDP and PF" begin 
+    rng = MersenneTwister(6)
+    pomdp = SubHuntPOMDP()
+    policy = solve(QMDPSolver(verbose=true), pomdp)
 
-policy = RandomPolicy(dpomdp, rng=rng)
-filter = SIRParticleFilter(dpomdp, 10000, rng=rng)
+    # policy = RandomPolicy(pomdp, rng=rng)
+    
+    filter = SIRParticleFilter(pomdp, 10000, rng=rng)
 
-for (s, a, r, sp) in stepthrough(dpomdp, policy, filter, "s,a,r,sp", max_steps=200, rng=rng)
-    v = SubVis(dpomdp.cp, s=s, a=a, r=r)
-    show(STDOUT, MIME("text/plain"), v)
+    for (s, a, r, sp) in stepthrough(pomdp, policy, filter, "s,a,r,sp", max_steps=200, rng=rng)
+        v = SubVis(pomdp, s=s, a=a, r=r)
+        show(stdout, MIME("text/plain"), v)
+    end
+end
+
+@testset begin "DPOMDP and PF"
+    rng = MersenneTwister(6)
+    dpomdp = DSubHuntPOMDP(SubHuntPOMDP(), 1.0)
+    policy = RandomPolicy(dpomdp, rng=rng)
+    filter = SIRParticleFilter(dpomdp, 10000, rng=rng)
+
+    for (s, a, r, sp) in stepthrough(dpomdp, policy, filter, "s,a,r,sp", max_steps=200, rng=rng)
+        v = SubVis(dpomdp.cp, s=s, a=a, r=r)
+        show(stdout, MIME("text/plain"), v)
+    end
 end

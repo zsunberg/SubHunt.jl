@@ -21,8 +21,8 @@ struct SubObsDist
     n::Normal{Float64}
 end
 
-function rand(rng::AbstractRNG, d::SubObsDist)
-    o = MVector{8, Float64}()
+function Base.rand(rng::AbstractRNG, d::SubObsDist)
+    o = MVector{8, Float64}(undef)
     for i in 1:length(o)
         if i == d.abeam
             o[i] = rand(rng, d.an)
@@ -33,7 +33,7 @@ function rand(rng::AbstractRNG, d::SubObsDist)
     return SVector(o)
 end
 
-function pdf(d::SubObsDist, o::Vec8)
+function Distributions.pdf(d::SubObsDist, o::Vec8)
     p = 1.0
     for i in 1:length(o)
         if i == d.abeam
@@ -46,7 +46,7 @@ function pdf(d::SubObsDist, o::Vec8)
 end
 
 function active_beam(rel_pos::Pos)
-    angle = atan2(rel_pos[2], rel_pos[1])
+    angle = atan(rel_pos[2], rel_pos[1])
     while angle <= 0.0
         angle += 2*pi
     end
@@ -54,7 +54,7 @@ function active_beam(rel_pos::Pos)
     return clamp(bm, 1, 8)
 end
 
-function observation(p::SubHuntPOMDP, a::Int, sp::SubState)
+function POMDPs.observation(p::SubHuntPOMDP, a::Int, sp::SubState)
     rel_pos = sp.target - sp.own
     dist = norm(rel_pos)
     if a == PING

@@ -1,16 +1,17 @@
-__precompile__()
 module SubHunt
 
 # package code goes here
 
+using Random
+using Printf
+using LinearAlgebra
 using Parameters
 using StaticArrays
-using POMDPToolbox
 using Distributions
+using POMDPs
+using POMDPModelTools
 using RecipesBase
 using ParticleFilters
-
-importall POMDPs
 
 export
     SubHuntPOMDP,
@@ -43,8 +44,8 @@ end
     discount::Float64               = 0.99
 end
 
-discount(p::SubHuntPOMDP) = p.discount
-isterminal(p::SubHuntPOMDP, s::SubState) = s == END_KILL || reached_goal(p, s)
+POMDPs.discount(p::SubHuntPOMDP) = p.discount
+POMDPs.isterminal(p::SubHuntPOMDP, s::SubState) = s == END_KILL || reached_goal(p, s)
 
 function reached_goal(p::SubHuntPOMDP, s::SubState)
     dir = DIR[s.goal]
@@ -56,7 +57,7 @@ function reached_goal(p::SubHuntPOMDP, s::SubState)
     end
 end
 
-function reward(p::SubHuntPOMDP, s::SubState, a::Int, sp::SubState)
+function POMDPs.reward(p::SubHuntPOMDP, s::SubState, a::Int, sp::SubState)
     if sp == END_KILL
         return 100.0
     else
