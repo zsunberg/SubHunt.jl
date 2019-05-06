@@ -9,6 +9,18 @@ end
 
 SubVis(p; s=nothing, a=nothing, o=nothing, b=nothing, r=nothing) = SubVis(p, a, r, s, o, b)
 SubVis(p::SubHuntPOMDP, arspobp::Tuple) = SubVis(p, arspobp...)
+SubVis(p::SubHuntPOMDP, nt::Union{NamedTuple, Dict}) = SubVis(p, get(nt, :a, nothing),
+                                                    get(nt, :r, nothing),
+                                                    get(nt, :s, nothing),
+                                                    get(nt, :o, nothing),
+                                                    get(nt, :b, nothing)
+                                                   )
+
+POMDPModelTools.render(m::SubHuntPOMDP, step) = SubVis(m, step)
+POMDPModelTools.render(dm::DSubHuntPOMDP, step) = SubVis(dm.cp, step)
+
+# anything besides text
+Base.show(io, mime::MIME, v::SubVis) = show(io, mime, plot(v))
 
 function Base.show(io::IO, mime::MIME"text/plain", v::SubVis)
     for y in v.p.size:-1:1
