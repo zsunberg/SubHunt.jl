@@ -1,5 +1,13 @@
 function POMDPs.transition(p::SubHuntPOMDP, s::SubState, a::Int)
     # own always moves ownspeed in desired direction
+
+    if s == END_KILL
+        # Can't just use Deterministic(END_KILL) due to ret type stability
+        states = @SVector fill(END_KILL, 4)
+        probs = SVector(1.0,0.0,0.0,0.0)
+        return SparseCat(states,probs)::SparseCat{SVector{4,SubState}, SVector{4,Float64}}
+    end
+
     if a == PING
         own = s.own
         aware = true
@@ -11,7 +19,7 @@ function POMDPs.transition(p::SubHuntPOMDP, s::SubState, a::Int)
         aware = s.aware
     end
 
-    # target moves 
+    # target moves
     t1 = clamp(p, s.target+2*DIR[s.goal])
     sp1 = SubState(own, t1, s.goal, aware)
 
