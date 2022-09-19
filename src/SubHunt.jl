@@ -9,7 +9,7 @@ using Parameters
 using StaticArrays
 using Distributions
 using POMDPs
-using POMDPModelTools
+using POMDPTools
 using RecipesBase
 using ParticleFilters
 
