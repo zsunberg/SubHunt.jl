@@ -16,8 +16,8 @@ SubVis(p::SubHuntPOMDP, nt::Union{NamedTuple, Dict}) = SubVis(p, get(nt, :a, not
                                                     get(nt, :b, nothing)
                                                    )
 
-POMDPModelTools.render(m::SubHuntPOMDP, step) = SubVis(m, step)
-POMDPModelTools.render(dm::DSubHuntPOMDP, step) = SubVis(dm.cp, step)
+POMDPTools.render(m::SubHuntPOMDP, step) = SubVis(m, step)
+POMDPTools.render(dm::DSubHuntPOMDP, step) = SubVis(dm.cp, step)
 
 # anything besides text
 Base.show(io, mime::MIME, v::SubVis) = show(io, mime, plot(v))

@@ -1,4 +1,4 @@
-POMDPs.n_states(p::SubHuntPOMDP) = p.size^4*4*2+1
+n_states(p::SubHuntPOMDP) = p.size^4*4*2+1
 
 function POMDPs.stateindex(p::SubHuntPOMDP, s::SubState)
     if s == END_KILL
@@ -38,7 +38,7 @@ Base.length(p::SubHuntPOMDP) = n_states(p)
 struct SubHuntInitDist
     p::SubHuntPOMDP
 end
-POMDPs.initialstate_distribution(p::SubHuntPOMDP) = SubHuntInitDist(p)
+POMDPs.initialstate(p::SubHuntPOMDP) = SubHuntInitDist(p)
 
 function Base.rand(rng::AbstractRNG, d::SubHuntInitDist)
     mid = round(Int, d.p.size/2)
@@ -54,8 +54,8 @@ function Base.rand(rng::AbstractRNG, d::SubHuntInitDist)
     return SubState(own, target, goal, false)
 end
 
-POMDPs.sampletype(::Type{SubHuntInitDist}) = SubState
+sampletype(::Type{SubHuntInitDist}) = SubState
 
 POMDPs.actions(p::SubHuntPOMDP) = 1:6
-POMDPs.n_actions(p::SubHuntPOMDP) = 6
+n_actions(p::SubHuntPOMDP) = 6
 POMDPs.actionindex(p::SubHuntPOMDP, a::Int) = a
