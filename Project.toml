@@ -17,8 +17,8 @@ StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 
 [compat]
 Distributions = "0.25"
-POMDPTools = "0.1"
-POMDPs = "0.9"
+POMDPTools = "0.1, 1"
+POMDPs = "0.9, 1"
 Parameters = "0.12"
 ParticleFilters = "0.5"
 RecipesBase = "1.2"
